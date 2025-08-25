@@ -1,4 +1,4 @@
-from ..models import db, Binder, User, Card, environment, SCHEMA
+from ..models import db, Binder, BinderCard, User, Card, environment
 from sqlalchemy.sql import text
 
 def seed_binders():
@@ -26,8 +26,13 @@ def seed_binders():
             user_id=demo.id,
             **default_set
         )
+        db.session.add(demo_binder)
+        db.session.flush()  # make sure demo_binder.id exists
+
         if cards:
-            demo_binder.cards.extend(cards[:3])
+            for c in cards[:3]:
+                db.session.add(BinderCard(binder_id=demo_binder.id, card_id=c.id, owned=True))
+
         binders.append(demo_binder)
 
     if marnie:
@@ -37,8 +42,13 @@ def seed_binders():
             user_id=marnie.id,
             **default_set
         )
+        db.session.add(marnie_binder)
+        db.session.flush()
+
         if len(cards) > 3:
-            marnie_binder.cards.extend(cards[3:6])
+            for c in cards[3:6]:
+                db.session.add(BinderCard(binder_id=marnie_binder.id, card_id=c.id, owned=True))
+
         binders.append(marnie_binder)
 
     if bobbie:
@@ -48,13 +58,18 @@ def seed_binders():
             user_id=bobbie.id,
             **default_set
         )
+        db.session.add(bobbie_binder)
+        db.session.flush()
+
         if len(cards) > 6:
-            bobbie_binder.cards.extend(cards[6:9])
+            for c in cards[6:9]:
+                db.session.add(BinderCard(binder_id=bobbie_binder.id, card_id=c.id, owned=True))
+
         binders.append(bobbie_binder)
 
-    db.session.add_all(binders)
     db.session.commit()
     print(f"Seeded {len(binders)} binders with card associations.")
+
 
 def undo_binders():
     if environment == "production":

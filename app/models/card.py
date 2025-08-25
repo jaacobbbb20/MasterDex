@@ -16,14 +16,12 @@ class Card(db.Model):
     set_id = db.Column(db.String, db.ForeignKey(add_prefix_for_prod("sets.id")), nullable=True)
 
     set = db.relationship("Set", back_populates="cards")
+
+    # Association object
     binder_cards = db.relationship("BinderCard", back_populates="card", cascade="all, delete-orphan")
 
-    binders = db.relationship(
-        "Binder",
-        secondary="binder_cards",
-        back_populates="cards",
-        viewonly=True
-    )
+    # Access binders via BinderCard (no secondary=)
+    binders = db.relationship("Binder", back_populates="cards", viewonly=True)
 
     # ----------------------------
     # Hybrid property for sorting
@@ -32,7 +30,7 @@ class Card(db.Model):
     def number_int(self):
         """Extract numeric part of number (e.g., '23a' -> 23, 'TG13' -> 13)."""
         try:
-            return int(''.join(filter(str.isdigit, self.number or "")))
+            return int("".join(filter(str.isdigit, self.number or "")))
         except ValueError:
             return None
 

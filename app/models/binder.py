@@ -1,6 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 
-
 class Binder(db.Model):
     __tablename__ = "binders"
 
@@ -14,22 +13,17 @@ class Binder(db.Model):
         db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False
     )
 
-    binder_cards = db.relationship(
-        "BinderCard", back_populates="binder", cascade="all, delete-orphan"
-    )
+    # Association object
+    binder_cards = db.relationship("BinderCard", back_populates="binder", cascade="all, delete-orphan")
 
-    # relationship to cards through binder_cards
-    cards = db.relationship(
-        "Card", secondary="binder_cards", back_populates="binders", viewonly=True
-    )
+    # Access cards via BinderCard (no secondary=)
+    cards = db.relationship("Card", back_populates="binders", viewonly=True)
 
-    comments = db.relationship(
-        "Comment", back_populates="binder", cascade="all, delete-orphan"
-    )
+    comments = db.relationship("Comment", back_populates="binder", cascade="all, delete-orphan")
 
     set_id = db.Column(
         db.String,
-        db.ForeignKey("sets.id", name="fk_binders_set_id"), 
+        db.ForeignKey(add_prefix_for_prod("sets.id"), name="fk_binders_set_id"),
         nullable=False,
     )
     set = db.relationship("Set", back_populates="binders")
