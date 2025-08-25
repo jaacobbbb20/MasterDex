@@ -1,6 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import cast, Integer
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .binder_card import BinderCard
 
 class Card(db.Model):
     __tablename__ = "cards"
@@ -21,7 +22,12 @@ class Card(db.Model):
     binder_cards = db.relationship("BinderCard", back_populates="card", cascade="all, delete-orphan")
 
     # Access binders via BinderCard (no secondary=)
-    binders = db.relationship("Binder", back_populates="cards", viewonly=True)
+    binders = db.relationship(
+        "Binder", 
+        secondary=BinderCard.__table__,
+        back_populates="cards", 
+        viewonly=True
+        )
 
     # ----------------------------
     # Hybrid property for sorting

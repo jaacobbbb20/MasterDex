@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .binder_card import BinderCard
 
 class Binder(db.Model):
     __tablename__ = "binders"
@@ -17,7 +18,11 @@ class Binder(db.Model):
     binder_cards = db.relationship("BinderCard", back_populates="binder", cascade="all, delete-orphan")
 
     # Access cards via BinderCard (no secondary=)
-    cards = db.relationship("Card", back_populates="binders", viewonly=True)
+    cards = db.relationship(
+        "Card", 
+        secondary=BinderCard.__table__,
+        back_populates="binders", 
+        viewonly=True)
 
     comments = db.relationship("Comment", back_populates="binder", cascade="all, delete-orphan")
 
