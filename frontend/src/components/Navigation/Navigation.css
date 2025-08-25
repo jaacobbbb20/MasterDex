@@ -1,0 +1,143 @@
+/* ================================
+   Navbar Layout
+================================ */
+nav.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 60px;
+  background-color: #9e9e9e;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-left,
+.nav-center,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-left { flex: 1; }
+.nav-center { flex: 2; justify-content: center; }
+.nav-right { flex: 1; justify-content: flex-end; gap: 1rem; }
+
+/* ================================
+   Logo
+================================ */
+.nav-left .nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Arial Black', sans-serif;
+}
+
+/* ================================
+   Search Bar
+================================ */
+.nav-center input {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+/* ================================
+   Buttons & Links
+================================ */
+.nav-right button,
+.nav-right a {
+  background-color: #6750a4;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-right button:hover,
+.nav-right a:hover {
+  background-color: #21a1f1;
+}
+
+/* ================================
+   Profile Button & Dropdown
+================================ */
+.profile-button-container { position: relative; }
+
+.profile-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+/* Avatar initial (moved from inline styles) */
+.avatar-initial {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  padding: 0.25rem 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  list-style: none;
+}
+
+/* Profile info block */
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.profile-info strong { font-weight: bold; color: #282c34; }
+.profile-info span { font-size: 0.85rem; color: #555; }
+
+/* Dropdown Items */
+.profile-dropdown li,
+.profile-dropdown button {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #282c34;
+  cursor: pointer;
+  font-weight: 500;
+  width: 100%;
+}
+
+.profile-dropdown li:hover,
+.profile-dropdown button:hover {
+  background-color: #f0f0f0;
+}

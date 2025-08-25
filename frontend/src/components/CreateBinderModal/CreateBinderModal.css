@@ -1,0 +1,112 @@
+/* Overlay matches login/signup modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Content box matches login/signup modal */
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  padding: 24px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Title */
+.modal-content h2 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Form styling */
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Input + select */
+.modal-content input,
+.modal-content select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+/* Put checkbox row in the same flow as the buttons */
+.checkbox-row {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0px -42px;
+  max-width: 200px;
+  width: 100%;
+}
+
+/* Checkbox label styling */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.create-btn {
+  background: #6750A4;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.create-btn:hover {
+  background: #604b9a;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.cancel-btn:hover {
+  background: #d1d5db;
+}
