@@ -1,0 +1,581 @@
+/* =========================================================
+   Theme variables (safe fallbacks for existing var(--*) refs)
+   ========================================================= */
+:root {
+  --text: #e8ecef;
+  --text-muted: #9fb0c2;
+
+  --paper: #f7f7f4;
+  --paper-edge: #e6e7e4;
+
+  --ring-metal: #cdd9e1;
+  --ring-shadow: rgba(0, 0, 0, 0.35);
+
+  --pocket: #0f1419;
+  --pocket-inner: #0c1015;
+  --pocket-border: #2a3138;
+}
+
+/* =======================================
+   Base / page
+   ======================================= */
+body {
+  background-color: #D9D9D9;
+}
+
+.binder-page.container {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+  background-color: #D9D9D9;
+}
+
+/* =======================================
+   Header
+   ======================================= */
+.binder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #999999;
+  border: 1px solid #252c33;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.binder-title-area {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.set-logo {
+  width: auto;
+  height: 48px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.titles .binder-name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.binder-subtitle {
+  margin: 0.15rem 0 0;
+  opacity: 0.85;
+}
+
+.binder-desc {
+  margin: 0.25rem 0 0;
+  opacity: 0.75;
+  max-width: 60ch;
+}
+
+.binder-stats {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+/* =======================================
+   Toolbar
+   ======================================= */
+.binder-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #2a3138;
+  outline: none;
+  background: #999999;
+  color: rgb(0, 0, 0);
+}
+.search-input {
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #2a3138;
+  outline: none;
+  background: #999999;
+  color: rgb(0, 0, 0);
+}
+
+.search-input::placeholder {
+  color: black;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  border: 1px solid #2a3138;
+  background: #999999;
+
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #161c23;
+}
+
+.btn-secondary {
+  background: #999999;
+}
+
+/* =======================================
+   Binder chrome (spine + rings)
+   ======================================= */
+.binder-chrome {
+  position: relative;
+  height: 24px;
+  margin-bottom: 12px;
+}
+
+.binder-spine {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(980px, 95%);
+  height: 100%;
+  background: linear-gradient(180deg, #2a3945, #202c36);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.08),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.binder-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 56px;
+}
+
+.binder-rings span {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background:
+    radial-gradient(35% 35% at 35% 35%, #fff, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(30% 30% at 65% 65%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 60%),
+    radial-gradient(70% 70% at 50% 60%, var(--ring-metal), rgba(201, 210, 216, 0.35));
+  box-shadow:
+    0 2px 10px var(--ring-shadow),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* =======================================
+   Binder view + sheet
+   ======================================= */
+.binder-view {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.binder-sheet {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 8.5 / 11;
+  background: #999999;
+  border-radius: 18px;
+  border: 1px solid;
+  overflow: hidden;
+}
+
+/* Punched holes on the left */
+.binder-sheet::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 10%;
+  width: 12px;
+  height: 80%;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(0, 0, 0, 0.25) 0 6px, transparent 7px),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.25) 0 6px, transparent 7px),
+    radial-gradient(circle at 50% 90%, rgba(0, 0, 0, 0.25) 0 6px, transparent 7px);
+  background-size: 12px 12px, 12px 12px, 12px 12px;
+  background-repeat: no-repeat;
+  background-position: 0 0, 0 50%, 0 100%;
+  filter: blur(0.2px);
+}
+
+/* 3×3 pockets grid */
+.pocket-grid {
+  position: absolute;
+  inset: 5% 6% 5% 10%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 14px;
+}
+
+/* =======================================
+   Pocket + card
+   ======================================= */
+.pocket {
+  position: relative;
+  background: linear-gradient(180deg, var(--pocket), var(--pocket-inner));
+  border: 1px solid var(--pocket-border);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Plastic gloss */
+.pocket-gloss {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(75deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.02) 38%, rgba(0, 0, 0, 0.08) 38.1%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+}
+
+/* Card in pocket */
+.card-in-pocket {
+  position: relative;
+  width: 96%;
+  height: 96%;
+  border-radius: 10px;
+  transform: translateZ(0);
+}
+
+.card-in-pocket:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Owned/unowned visuals (keep grayscale class approach) */
+.card-image.grayscale {
+  filter: grayscale(100%) brightness(0.6);
+  opacity: 0.6;
+}
+
+.pocket.filled.owned .card-image {
+  filter: none;
+  opacity: 1;
+}
+
+/* Caption */
+.card-caption {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: #eaeef2;
+  font-size: 12px;
+  backdrop-filter: blur(2px);
+}
+
+.card-caption .card-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.card-meta {
+  display: flex;
+  gap: 8px;
+  opacity: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-number {
+  opacity: 0.9;
+}
+
+.rarity-tag {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+/* =======================================
+   Empty pocket
+   ======================================= */
+.pocket.empty {
+  background: linear-gradient(180deg, #0b0e11, #11161b);
+  border-style: dashed;
+  border-color: #2d3640;
+}
+
+.empty-pocket-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #8fa2b5;
+  font-size: 12px;
+}
+
+.pokeball-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 6px, #222 6px 7px, transparent 8px),
+    linear-gradient(#222, #222);
+  background-size: 100% 100%, 100% 2px;
+  background-repeat: no-repeat;
+  background-position: center center, center 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* =======================================
+   Pagination (nav buttons + indicator)
+   ======================================= */
+.page-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid #2a3138;
+  background: #0f1419;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  line-height: 1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.page-btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-btn:hover:not([disabled]) {
+  background: #151c22;
+}
+
+.page-indicator {
+  margin: 12px auto 0;
+  text-align: center;
+  color: black;
+  font-size: 0.9rem;
+}
+
+/* ================================
+   Brand + buttons (site-wide look)
+================================ */
+:root {
+  --brand: #6750A4;
+  --brand-700: #584096;
+  --brand-text: #fff;
+
+  --danger: #b3261e;
+  --danger-700: #8c1d17;
+}
+
+/* Base button */
+.btn {
+  background: var(--brand);
+  color: var(--brand-text);
+  border: none;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn:hover { filter: brightness(0.95); }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+/* Outline/secondary */
+.btn-secondary {
+  background: transparent;
+  color: var(--brand);
+  border: 1px solid var(--brand);
+}
+
+/* Danger (delete) */
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-danger:hover { background: var(--danger-700); }
+
+/* Make the “Back” button look outlined */
+.toolbar-actions .btn.btn-secondary {
+  background: transparent;
+  color: var(--brand);
+  border: 1px solid var(--brand);
+}
+
+/* ================================
+   Inputs (search)
+================================ */
+.search-input {
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #2a3138;
+  outline: none;
+  background: #999999;
+  color: #000;
+}
+.search-input::placeholder { color: #000; }
+.search-input:focus {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ================================
+   Delete confirm modal
+================================ */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: grid;
+  place-items: center;
+  z-index: 1100;
+}
+
+.confirm-content {
+  width: min(420px, 92vw);
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.2);
+}
+
+.confirm-content h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+.confirm-content p { margin: 0 0 12px; color: #444; }
+
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.inline-error {
+  color: var(--danger);
+  margin: 4px 0 10px;
+  font-size: .9rem;
+}
+
+/* ================================
+   Profile stats (scoped styles)
+   ================================ */
+.profile-page .profile-stats {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Grid wrapper for the three stats */
+.profile-page .profile-stats .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
+}
+
+/* Each stat block: rectangular, black border */
+.profile-page .profile-stats .stat {
+  appearance: none;
+  background: #ffffff;
+  color: #111;
+  border: 1px solid #000;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.profile-page .profile-stats .stat:active {
+  transform: translateY(1px);
+}
+.profile-page .profile-stats .stat:focus-visible {
+  outline: 2px solid #6750A4;
+  outline-offset: 2px;
+}
+
+/* Numbers + labels inside the stat */
+.profile-page .profile-stats .stat h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: #111;
+}
+.profile-page .profile-stats .stat p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #333;
+  opacity: 0.9;
+}
+
+/* Optional: keep your Follow/Unfollow button sizing/placement intact */
+.profile-page .profile-stats .follow-btn {
+  height: 32px;
+  align-self: center;
+  background: #6750A4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.profile-page .profile-stats .follow-btn:hover { filter: brightness(0.95); }
+.profile-page .profile-stats .follow-btn:active { transform: translateY(1px); }
+.profile-page .profile-stats .follow-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
