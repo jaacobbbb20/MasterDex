@@ -16,9 +16,9 @@ export default function FollowsModal({
 
   useEffect(() => setTab(initialTab), [initialTab]);
 
-  if (!isOpen) return null;
-
   useEffect(() => {
+    if (!isOpen) return; 
+
     let cancelled = false;
     setError("");
     setLoading(true);
@@ -48,7 +48,9 @@ export default function FollowsModal({
       }
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [isOpen, userId]);
 
   useEffect(() => {
@@ -60,10 +62,9 @@ export default function FollowsModal({
     }
   }, [lists, onCountsChange]);
 
-  const activeList = useMemo(
-    () => (tab === "followers" ? lists.followers : lists.following),
-    [tab, lists]
-  );
+  const activeList = useMemo(() => {
+    return tab === "followers" ? lists.followers : lists.following;
+  }, [tab, lists]);
 
   const initials = (u) => {
     const fn = u.firstName || u.first_name || "";
@@ -71,6 +72,8 @@ export default function FollowsModal({
     const i = `${fn.charAt(0)}${ln.charAt(0)}`.toUpperCase();
     return i || "@";
   };
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -134,7 +137,8 @@ export default function FollowsModal({
                     <div className="user-details">
                       <div className="username">@{u.username}</div>
                       <div className="name">
-                        {(u.firstName || u.first_name) || ""} {(u.lastName || u.last_name) || ""}
+                        {(u.firstName || u.first_name) || ""}{" "}
+                        {(u.lastName || u.last_name) || ""}
                       </div>
                     </div>
                   </Link>

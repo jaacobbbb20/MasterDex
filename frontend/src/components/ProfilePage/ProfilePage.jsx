@@ -93,7 +93,7 @@ export default function ProfilePage() {
         );
         const raw = await res.text();
         let data = {};
-        try { data = JSON.parse(raw); } catch {}
+        try { data = JSON.parse(raw); } catch {/*ignore*/}
 
         if (!res.ok) {
           throw new Error(data?.errors?.message || `${res.status} ${res.statusText}`);
@@ -165,7 +165,7 @@ export default function ProfilePage() {
     );
     const raw = await res.text();
     let data = {};
-    try { data = raw ? JSON.parse(raw) : {}; } catch {}
+    try { data = raw ? JSON.parse(raw) : {}; } catch {/* Ignore */}
     if (res.ok && (data.user || data)) {
       setProfileUser(normalizeUser(data.user || data));
     }
@@ -335,7 +335,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Bio */}
-        {bio && <p className="profile-bio">"{bio}"</p>}
+        {bio && <p className="profile-bio">&quot;{bio}&quot;</p>}
 
         <hr className="divider" />
 

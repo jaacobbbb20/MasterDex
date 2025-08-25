@@ -62,7 +62,7 @@ const LandingPage = () => {
           </div>
           <div className="feature-column">
             <div className="feature-item">Social: Follow other collectors and see their collections.</div>
-            <div className="feature-item">Comments: Leave and read comments on other user's binders.</div>
+            <div className="feature-item">Comments: Leave and read comments on other user&apos; binders.</div>
           </div>
         </div>
       </section>

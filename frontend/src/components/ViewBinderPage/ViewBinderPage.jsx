@@ -175,7 +175,7 @@ export default function ViewBinderPage() {
       });
       const text = await res.text();
       let data = {};
-      try { data = text ? JSON.parse(text) : {}; } catch {}
+      try { data = text ? JSON.parse(text) : {}; } catch {/* Ignore */}
       if (!res.ok) throw new Error(data?.errors?.message || `${res.status} ${res.statusText}`);
       navigate(`/users/${sessionUser.username}`);
     } catch (e) {

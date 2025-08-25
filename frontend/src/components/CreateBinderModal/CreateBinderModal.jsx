@@ -5,8 +5,8 @@ import "./CreateBinderModal.css";
 const CreateBinderModal = ({ onClose }) => {
   const [sets, setSets] = useState([]);
   const [selectedSet, setSelectedSet] = useState("");
-  const [customNameChecked, setCustomNameChecked] = useState(false);
-  const [customName, setCustomName] = useState("");
+  const [customNameChecked] = useState(false);
+  const [customName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
