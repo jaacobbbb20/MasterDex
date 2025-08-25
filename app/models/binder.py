@@ -28,7 +28,7 @@ class Binder(db.Model):
 
     set_id = db.Column(
         db.String,
-        db.ForeignKey(add_prefix_for_prod("sets.id"), name="fk_binders_set_id"),
+        db.ForeignKey(add_prefix_for_prod("sets.id")),
         nullable=False,
     )
     set = db.relationship("Set", back_populates="binders")
