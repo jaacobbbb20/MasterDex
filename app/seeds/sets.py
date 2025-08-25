@@ -48,10 +48,9 @@ def seed_sets():
                     print(f"Failed to fetch sets for {ser} after retries")
                     raise
 
-
 def undo_sets():
     if environment == "production":
-        db.session.execute(f"TRUNCATE table {SCHEMA}.sets RESTART IDENTITY CASCADE;")
+        db.session.execute(text("TRUNCATE table sets RESTART IDENTITY CASCADE;"))
     else:
         db.session.execute(text("DELETE FROM sets"))
     db.session.commit()
