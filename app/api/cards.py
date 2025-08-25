@@ -1,81 +1,61 @@
-import requests
-import os
 from flask import Blueprint, request, jsonify
+from flask_login import login_required, current_user
+from app.models import db, Card, Binder, BinderCard
 
-cards_bp = Blueprint('cards', __name__)
+cards_bp = Blueprint("cards", __name__)
 
-BASE_URL = "https://api.pokemontcg.io/v2"
+# GET /api/cards?page=1&per_page=50
+@cards_bp.route("/", methods=["GET"])
+def get_cards():
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 50, type=int)
 
-def get_headers():
-    """THIS IS A HELPER FUNCTION THAT GETS NECESSARY API HEADERS"""
-    headers = {}
-    api_key = os.environ.get('POKEMON_TCG_API_KEY')
-    if api_key:
-        headers['X-Api-Key'] = api_key
-    return headers
+    cards = Card.query.order_by(Card.number).paginate(page=page, per_page=per_page, error_out=False)
+    return jsonify({
+        "cards": [c.to_dict() for c in cards.items],
+        "page": page,
+        "total_pages": cards.pages
+    })
 
-@cards_bp.route('/cards', methods=['GET'])
-def search_cards():
-    """Search/Filter Pokemon Cards"""
-    try:
-        query_params = request.args.to_dict()
-        
-        if 'pageSize' not in query_params:
-            query_params['pageSize'] = '20'
 
-        response = requests.get(
-            f"{BASE_URL}/cards",
-            params=query_params,
-            headers=get_headers(),
-            timeout=30
-        )
-        
-        if response.status_code != 200:
-            return jsonify({"error": "Failed to fetch cards"}), response.status_code
-        
-        return jsonify(response.json())
-        
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-@cards_bp.route('/cards/<card_id>', methods=['GET'])
-def get_card_details(card_id):
-    """Get details for a specific card"""
-    try:
-        response = requests.get(
-            f"{BASE_URL}/cards/{card_id}",
-            headers=get_headers(),
-            timeout=30
-        )
-        
-        if response.status_code == 404:
-            return jsonify({"error": "Card not found"}), 404
-        
-        if response.status_code != 200:
-            return jsonify({"error": "Failed to fetch card details"}), response.status_code
-        
-        return jsonify(response.json())
-        
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-@cards_bp.route('/sets', methods=['GET'])
-def get_sets():
-    """Get all available sets"""
-    try:
-        query_params = request.args.to_dict()
-        
-        response = requests.get(
-            f"{BASE_URL}/sets",
-            params=query_params,
-            headers=get_headers(),
-            timeout=30
-        )
-        
-        if response.status_code != 200:
-            return jsonify({"error": "Failed to fetch sets"}), response.status_code
-        
-        return jsonify(response.json())
-        
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# GET /api/cards/:id
+@cards_bp.route("/<string:card_id>", methods=["GET"])
+def get_card(card_id):
+    card = Card.query.get(card_id)
+    if not card:
+        return {"error": "Card not found"}, 404
+    return card.to_dict()
+
+# ------------------------------
+# PUT /api/cards/<card_id>/toggle
+# ------------------------------
+@cards_bp.route("/<string:card_id>/toggle", methods=["PUT"])
+@login_required
+def toggle_card(card_id):
+    data = request.get_json() or {}
+    binder_id = data.get("binder_id")
+    if not binder_id:
+      return {"errors": {"message": "Missing binder_id"}}, 400
+
+    binder = Binder.query.get(binder_id)
+    if not binder or binder.user_id != current_user.id:
+      return {"errors": {"message": "Binder not found or unauthorized"}}, 404
+
+    card = Card.query.get(card_id)
+    if not card:
+      return {"errors": {"message": "Card not found"}}, 404
+
+    bc = BinderCard.query.filter_by(binder_id=binder.id, card_id=card.id).one_or_none()
+    if bc is None:
+        bc = BinderCard(binder_id=binder.id, card_id=card.id, owned=True)
+        db.session.add(bc)
+    else:
+        bc.owned = not bc.owned
+
+    db.session.commit()
+
+    payload = card.to_dict()
+    if "set" not in payload and getattr(card, "set_id", None):
+        payload["set"] = {"id": card.set_id}
+
+    return {"card": payload, "owned": bc.owned}
