@@ -1,8 +1,8 @@
-"""add set metadata to binders
+"""initial clean schema
 
-Revision ID: b52d6e5b0aa4
-Revises: 6d2c4cdfbc94
-Create Date: 2025-08-24 18:31:23.963243
+Revision ID: 60314f2da823
+Revises: 
+Create Date: 2025-08-25 15:18:57.195568
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b52d6e5b0aa4'
-down_revision = '6d2c4cdfbc94'
+revision = '60314f2da823'
+down_revision = None
 branch_labels = None
 depends_on = None
 
