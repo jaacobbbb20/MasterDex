@@ -73,8 +73,12 @@ def seed_binders():
 
 def undo_binders():
     if environment == "production":
-        db.session.execute(text("TRUNCATE table binder_cards RESTART IDENTITY CASCADE;"))
-        db.session.execute(text("TRUNCATE table binders RESTART IDENTITY CASCADE;"))
+        db.session.execute(
+            text(f"TRUNCATE table {SCHEMA}.binder_cards RESTART IDENTITY CASCADE;")
+        )
+        db.session.execute(
+            text(f"TRUNCATE table {SCHEMA}.binders RESTART IDENTITY CASCADE;")
+        )
     else:
         db.session.execute(text("DELETE FROM binder_cards"))
         db.session.execute(text("DELETE FROM binders"))
