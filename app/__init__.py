@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, send_from_directory
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -80,9 +80,14 @@ def https_redirect():
 # ----------------------------
 # Routes
 # ----------------------------
-@app.route("/")
-def home():
-    return {"message": "Hello Pokémon Tracker!"}
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, "index.html")
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # Render assigns PORT
