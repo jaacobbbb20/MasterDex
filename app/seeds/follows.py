@@ -48,25 +48,29 @@ def seed_follows():
         ("hannah_deck", "fiona_pokemon"),
     ]
 
-    follows_to_add = []
+    created = 0
     for follower_name, following_name in follow_relationships:
         follower = users.get(follower_name)
         following = users.get(following_name)
 
-        # Ensure both users exist
         if follower and following:
-            follows_to_add.append(
-                Follow(follower_id=follower.id, following_id=following.id)
-            )
+            # Prevent duplicates → check if the follow already exists
+            existing = Follow.query.filter_by(
+                follower_id=follower.id, following_id=following.id
+            ).first()
+            if not existing:
+                db.session.add(
+                    Follow(follower_id=follower.id, following_id=following.id)
+                )
+                created += 1
 
-    db.session.add_all(follows_to_add)
     db.session.commit()
-    print(f"Seeded {len(follows_to_add)} follow relationships.")
+    print(f"Seeded {created} new follow relationships.")
 
 def undo_follows():
     if environment == "production":
         db.session.execute(
-            text(f"TRUNCATE table {SCHEMA}.follows RESTART IDENTITY CASCADE;")
+            text(f"DELETE FROM {SCHEMA}.follows")
         )
     else:
         db.session.execute(text("DELETE FROM follows"))
