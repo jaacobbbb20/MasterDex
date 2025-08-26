@@ -1,4 +1,4 @@
-from ..models import db, Card, environment, SCHEMA
+from ..models import db, Card, Set, environment, SCHEMA
 from pokemontcgsdk import Card as TCGCard
 from sqlalchemy.sql import text
 from time import sleep
@@ -8,6 +8,10 @@ def seed_cards():
     page_size = 50
     total_seeded = 0
     retries = 3
+
+    # Fetch valid set IDs from DB first
+    valid_set_ids = {s.id for s in db.session.query(Set.id).all()}
+    print(f"Valid sets in DB: {valid_set_ids}")
 
     while True:
         print(f"Fetching page {page}...")
@@ -19,19 +23,9 @@ def seed_cards():
                     page=page,
                     pageSize=page_size
                 )
-                break  # success → exit retry loop
+                break
             except Exception as e:
-                if isinstance(e, (bytes, bytearray)):
-                    err_msg = e.decode("utf-8", errors="ignore")
-                elif hasattr(e, "args") and e.args and isinstance(e.args[0], (bytes, bytearray)):
-                    err_msg = e.args[0].decode("utf-8", errors="ignore")
-                else:
-                    try:
-                        err_msg = str(e)
-                    except Exception:
-                        err_msg = repr(e)
-
-                print(f"Error fetching page {page} (attempt {attempt}/{retries}): {err_msg}")
+                print(f"Error fetching page {page} (attempt {attempt}/{retries}): {e}")
                 if attempt < retries:
                     print("Retrying in 5s...")
                     sleep(5)
@@ -39,29 +33,33 @@ def seed_cards():
                 else:
                     print(f"Failed to fetch page {page} after {retries} attempts. Stopping.")
                     return
-        else:
-            # retries exceeded
-            break
 
         if not cards:
             break
 
+        added = 0
         for c in cards:
+            set_id = c.set.id if c.set else None
+            if set_id not in valid_set_ids:
+                print(f"Skipping card {c.id} (set {set_id} not found in DB)")
+                continue  # skip instead of crashing
+
             card = Card(
                 id=c.id,
                 name=c.name,
                 image=getattr(c.images, "large", None),
                 rarity=c.rarity,
                 number=c.number,
-                set_id=c.set.id if c.set else None,
+                set_id=set_id,
             )
-            db.session.merge(card)  # merge = insert or update
+            db.session.merge(card)
+            added += 1
 
         db.session.commit()
-        total_seeded += len(cards)
-        print(f"Seeded {len(cards)} cards (total: {total_seeded})")
+        total_seeded += added
+        print(f"✅ Seeded {added} cards (total: {total_seeded})")
 
-        # small delay before next page
+        # Delay before next page
         sleep(0.5)
         page += 1
 
@@ -70,7 +68,9 @@ def seed_cards():
 
 def undo_cards():
     if environment == "production":
-        db.session.execute(text(f"DELETE FROM {SCHEMA}.cards"))
+        db.session.execute(
+            text(f"TRUNCATE table {SCHEMA}.cards RESTART IDENTITY CASCADE;")
+        )
     else:
         db.session.execute(text("DELETE FROM cards"))
     db.session.commit()
