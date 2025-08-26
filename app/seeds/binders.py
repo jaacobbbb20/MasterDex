@@ -1,4 +1,4 @@
-from ..models import db, Binder, BinderCard, User, Card, environment
+from ..models import db, Binder, BinderCard, User, Card, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_binders():
