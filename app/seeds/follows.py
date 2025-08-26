@@ -65,7 +65,9 @@ def seed_follows():
 
 def undo_follows():
     if environment == "production":
-        db.session.execute(text("TRUNCATE table follows RESTART IDENTITY CASCADE;"))
+        db.session.execute(
+            text(f"TRUNCATE table {SCHEMA}.follows RESTART IDENTITY CASCADE;")
+        )
     else:
         db.session.execute(text("DELETE FROM follows"))
     db.session.commit()
