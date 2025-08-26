@@ -70,9 +70,7 @@ def seed_cards():
 
 def undo_cards():
     if environment == "production":
-        db.session.execute(
-            text(f"TRUNCATE table {SCHEMA}.cards RESTART IDENTITY CASCADE;")
-        )
+        db.session.execute(text(f"DELETE FROM {SCHEMA}.cards"))
     else:
         db.session.execute(text("DELETE FROM cards"))
     db.session.commit()
