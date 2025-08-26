@@ -1,4 +1,4 @@
-from ..models import db, Card
+from ..models import db, Card, environment, SCHEMA
 from pokemontcgsdk import Card as TCGCard
 from sqlalchemy.sql import text
 from time import sleep
@@ -69,5 +69,10 @@ def seed_cards():
 
 
 def undo_cards():
-    db.session.execute(text("DELETE FROM cards"))
+    if environment == "production":
+        db.session.execute(
+            text(f"TRUNCATE table {SCHEMA}.cards RESTART IDENTITY CASCADE;")
+        )
+    else:
+        db.session.execute(text("DELETE FROM cards"))
     db.session.commit()
