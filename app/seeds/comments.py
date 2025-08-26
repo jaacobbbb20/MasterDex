@@ -10,43 +10,37 @@ def seed_comments():
     marnie_binder = Binder.query.filter_by(name="Marnie's Tournament Deck").first()
     bobbie_binder = Binder.query.filter_by(name="Bobbie's Childhood Collection").first()
 
-    comments = []
+    comments_data = [
+        (demo, marnie_binder, "Great binder! I love your card selection, Marnie."),
+        (demo, bobbie_binder, "Nostalgic collection! Takes me back to my childhood too."),
+        (marnie, demo_binder, "Your collection is amazing, Demo! So many rare cards."),
+        (bobbie, demo_binder, "Wow Demo, your collection has grown so much!"),
+    ]
 
-    if demo and marnie_binder:
-        comments.append(Comment(
-            content="Great binder! I love your card selection, Marnie.",
-            user_id=demo.id,
-            binder_id=marnie_binder.id
-        ))
-    if demo and bobbie_binder:
-        comments.append(Comment(
-            content="Nostalgic collection! Takes me back to my childhood too.",
-            user_id=demo.id,
-            binder_id=bobbie_binder.id
-        ))
+    created = 0
+    for user, binder, content in comments_data:
+        if user and binder:
+            # Prevent duplicates → only insert if it doesn't already exist
+            existing = Comment.query.filter_by(
+                user_id=user.id,
+                binder_id=binder.id,
+                content=content
+            ).first()
+            if not existing:
+                db.session.add(Comment(
+                    content=content,
+                    user_id=user.id,
+                    binder_id=binder.id
+                ))
+                created += 1
 
-    if marnie and demo_binder:
-        comments.append(Comment(
-            content="Your collection is amazing, Demo! So many rare cards.",
-            user_id=marnie.id,
-            binder_id=demo_binder.id
-        ))
-
-    if bobbie and demo_binder:
-        comments.append(Comment(
-            content="Wow Demo, your collection has grown so much!",
-            user_id=bobbie.id,
-            binder_id=demo_binder.id
-        ))
-
-    db.session.add_all(comments)
     db.session.commit()
-    print(f"Seeded {len(comments)} comments.")
+    print(f"Seeded {created} new comments.")
 
 def undo_comments():
     if environment == "production":
         db.session.execute(
-            text(f"TRUNCATE table {SCHEMA}.comments RESTART IDENTITY CASCADE;")
+            text(f"DELETE FROM {SCHEMA}.comments")
         )
     else:
         db.session.execute(text("DELETE FROM comments"))
