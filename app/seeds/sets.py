@@ -1,4 +1,3 @@
-# app/seeds/sets.py
 from ..models import db, Set, environment, SCHEMA
 from pokemontcgsdk import Set as TcgSet
 from sqlalchemy.sql import text
@@ -50,7 +49,9 @@ def seed_sets():
 
 def undo_sets():
     if environment == "production":
-        db.session.execute(text("TRUNCATE table sets RESTART IDENTITY CASCADE;"))
+        db.session.execute(
+            text(f"TRUNCATE table {SCHEMA}.sets RESTART IDENTITY CASCADE;")
+        )
     else:
         db.session.execute(text("DELETE FROM sets"))
     db.session.commit()
